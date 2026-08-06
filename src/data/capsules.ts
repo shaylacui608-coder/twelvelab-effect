@@ -15,11 +15,11 @@ export const CAPSULES: CapsuleSpec[] = [
     tint: [1.0, 0.98, 0.92],
   },
   {
-    label: "Two people dancing against the blue sky",
+    label: "Woman running uphill with red roses",
     videoSrc: "/clips/dancers.webm",
-    motionDir: [0.6, -0.2],
-    motionStrength: 0.035,
-    tint: [0.98, 1.0, 1.05],
+    motionDir: [1.0, 0.35],
+    motionStrength: 0.045,
+    tint: [1.02, 0.98, 0.96],
   },
   {
     label: "Red robotic arm in action",
