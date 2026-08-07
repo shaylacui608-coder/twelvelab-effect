@@ -13,7 +13,8 @@ type Options = {
   videoAspect: number;
   pillAspect: number;
   scrollSpeed: number;
-  tiles: number;
+  pasteWidth: number;
+  pasteIntervalSec: number;
 };
 
 export function useHistoryStrip({
@@ -21,7 +22,8 @@ export function useHistoryStrip({
   videoAspect,
   pillAspect,
   scrollSpeed,
-  tiles,
+  pasteWidth,
+  pasteIntervalSec,
 }: Options) {
   const { gl } = useThree();
 
@@ -44,6 +46,7 @@ export function useHistoryStrip({
 
   const pingPong = useRef({ read: rts.a, write: rts.b });
   const outputTexture = useRef<THREE.Texture>(rts.a.texture);
+  const timeSincePasteRef = useRef(0);
 
   const scene = useMemo(() => new THREE.Scene(), []);
   const camera = useMemo(
@@ -52,18 +55,18 @@ export function useHistoryStrip({
   );
 
   const material = useMemo(() => {
-    const m = new THREE.ShaderMaterial({
+    return new THREE.ShaderMaterial({
       vertexShader: historyVert,
       fragmentShader: historyFrag,
       uniforms: {
         uPrev: { value: null },
         uVideo: { value: null },
         uShiftUv: { value: 0.005 },
-        uPasteWidth: { value: 1 / 4 },
+        uPasteWidth: { value: 0.2 },
+        uPasteEnabled: { value: 0.0 },
         uVideoAspectFit: { value: new THREE.Vector2(1, 1) },
       },
     });
-    return m;
   }, []);
 
   const quad = useMemo(() => {
@@ -73,12 +76,11 @@ export function useHistoryStrip({
   }, [material, scene]);
 
   useEffect(() => {
-    const pasteFraction = 1 / tiles;
-    material.uniforms.uPasteWidth.value = pasteFraction;
+    material.uniforms.uPasteWidth.value = pasteWidth;
 
-    const pasteRegionAspect =
-      (STRIP_W * pasteFraction) / STRIP_H / (pillAspect / tiles);
-    const targetAspect = pasteRegionAspect * (pillAspect / tiles);
+    const pasteRegionAspect = (STRIP_W * pasteWidth) / STRIP_H;
+    const paintedAspect = pasteRegionAspect / (pillAspect * pasteWidth);
+    const targetAspect = paintedAspect * pasteWidth * pillAspect;
 
     if (videoAspect > targetAspect) {
       material.uniforms.uVideoAspectFit.value.set(
@@ -91,7 +93,7 @@ export function useHistoryStrip({
         videoAspect / targetAspect,
       );
     }
-  }, [material, videoAspect, pillAspect, tiles]);
+  }, [material, videoAspect, pillAspect, pasteWidth]);
 
   useEffect(() => {
     return () => {
@@ -106,9 +108,16 @@ export function useHistoryStrip({
     if (!videoTexture) return;
     const video = videoTexture.image as HTMLVideoElement | undefined;
     if (!video || video.readyState < 2) return;
+
+    timeSincePasteRef.current += delta;
+    const shouldPaste = timeSincePasteRef.current >= pasteIntervalSec;
+
     material.uniforms.uVideo.value = videoTexture;
     material.uniforms.uPrev.value = pingPong.current.read.texture;
     material.uniforms.uShiftUv.value = Math.min(delta * scrollSpeed, 0.06);
+    material.uniforms.uPasteEnabled.value = shouldPaste ? 1.0 : 0.0;
+
+    if (shouldPaste) timeSincePasteRef.current = 0;
 
     const prevRt = gl.getRenderTarget();
     gl.setRenderTarget(pingPong.current.write);

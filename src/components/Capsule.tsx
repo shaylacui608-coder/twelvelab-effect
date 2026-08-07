@@ -10,13 +10,14 @@ import { useHistoryStrip } from "../three/hooks/useHistoryStrip";
 type Props = {
   videoSrc: string;
   tint: [number, number, number];
-  tiles?: number;
   scrollSpeed?: number;
+  pasteWidth?: number;
+  pasteIntervalMs?: number;
 };
 
 const HALF = new THREE.Vector2(1.4, 0.65);
-const SIZE: [number, number, number] = [HALF.x * 2, HALF.y * 2, 1.1];
-const RADIUS = 0.55;
+const SIZE: [number, number, number] = [HALF.x * 2, HALF.y * 2, 0.85];
+const RADIUS = 0.28;
 
 function useSimpleVideoTexture(src: string) {
   const [texture, setTexture] = useState<THREE.VideoTexture | null>(null);
@@ -67,7 +68,13 @@ function useSimpleVideoTexture(src: string) {
   return { texture, aspect };
 }
 
-function Mesh({ videoSrc, tint, tiles = 5, scrollSpeed = 0.7 }: Props) {
+function Mesh({
+  videoSrc,
+  tint,
+  scrollSpeed = 0.5,
+  pasteWidth = 0.22,
+  pasteIntervalMs = 350,
+}: Props) {
   const meshRef = useRef<THREE.Mesh>(null!);
   const { texture, aspect } = useSimpleVideoTexture(videoSrc);
 
@@ -76,7 +83,8 @@ function Mesh({ videoSrc, tint, tiles = 5, scrollSpeed = 0.7 }: Props) {
     videoAspect: aspect,
     pillAspect: HALF.x / HALF.y,
     scrollSpeed,
-    tiles,
+    pasteWidth,
+    pasteIntervalSec: pasteIntervalMs / 1000,
   });
 
   const material = useMemo(() => {
@@ -86,9 +94,8 @@ function Mesh({ videoSrc, tint, tiles = 5, scrollSpeed = 0.7 }: Props) {
       transparent: true,
       uniforms: {
         uStrip: { value: stripTextureRef.current },
-        uSoftness: { value: 0.014 },
-        uIor: { value: 1.35 },
-        uRefractStrength: { value: 0.14 },
+        uIor: { value: 1.3 },
+        uRefractStrength: { value: 0.1 },
         uTint: { value: new THREE.Color(tint[0], tint[1], tint[2]) },
         uTime: { value: 0 },
         uHalfSize: { value: HALF.clone() },
@@ -101,8 +108,8 @@ function Mesh({ videoSrc, tint, tiles = 5, scrollSpeed = 0.7 }: Props) {
     material.uniforms.uTime.value = t;
     material.uniforms.uStrip.value = stripTextureRef.current;
     if (meshRef.current) {
-      meshRef.current.rotation.y = 0.42 + Math.sin(t * 0.35) * 0.02;
-      meshRef.current.rotation.x = -0.42 + Math.cos(t * 0.3) * 0.015;
+      meshRef.current.rotation.y = 0.3 + Math.sin(t * 0.3) * 0.015;
+      meshRef.current.rotation.x = -0.34 + Math.cos(t * 0.28) * 0.01;
     }
   });
 
@@ -124,7 +131,7 @@ export function Capsule(props: Props) {
     <Canvas
       dpr={[1, 2]}
       orthographic
-      camera={{ position: [0, 0, 6], zoom: 105 }}
+      camera={{ position: [0, 0, 6], zoom: 115 }}
       gl={{ alpha: true, antialias: true, premultipliedAlpha: false }}
       style={{ background: "transparent" }}
     >

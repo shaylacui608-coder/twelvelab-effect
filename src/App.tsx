@@ -14,8 +14,9 @@ export function App() {
               <Capsule
                 videoSrc={c.videoSrc}
                 tint={c.tint}
-                tiles={c.tiles}
                 scrollSpeed={c.scrollSpeed}
+                pasteWidth={c.pasteWidth}
+                pasteIntervalMs={c.pasteIntervalMs}
               />
             </div>
           </div>
