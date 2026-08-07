@@ -91,7 +91,7 @@ body {
 
 .capsule-canvas {
   width: 100%;
-  aspect-ratio: 16 / 9;
-  filter: drop-shadow(0 30px 34px rgba(0, 0, 0, 0.16))
+  aspect-ratio: 2.2 / 1;
+  filter: drop-shadow(0 26px 30px rgba(0, 0, 0, 0.15))
           drop-shadow(0 8px 12px rgba(0, 0, 0, 0.06));
 }

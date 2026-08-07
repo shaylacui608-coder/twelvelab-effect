@@ -5,16 +5,17 @@ import * as THREE from "three";
 
 import vert from "../three/shaders/capsule.vert.glsl";
 import frag from "../three/shaders/capsule.frag.glsl";
+import { useHistoryStrip } from "../three/hooks/useHistoryStrip";
 
 type Props = {
   videoSrc: string;
-  motionDir: [number, number];
-  motionStrength: number;
   tint: [number, number, number];
+  tiles?: number;
+  scrollSpeed?: number;
 };
 
-const HALF = new THREE.Vector2(1.5, 0.84);
-const SIZE: [number, number, number] = [HALF.x * 2, HALF.y * 2, 1.2];
+const HALF = new THREE.Vector2(1.4, 0.65);
+const SIZE: [number, number, number] = [HALF.x * 2, HALF.y * 2, 1.1];
 const RADIUS = 0.55;
 
 function useSimpleVideoTexture(src: string) {
@@ -66,46 +67,42 @@ function useSimpleVideoTexture(src: string) {
   return { texture, aspect };
 }
 
-function Mesh({ videoSrc, motionDir, motionStrength, tint }: Props) {
+function Mesh({ videoSrc, tint, tiles = 5, scrollSpeed = 0.7 }: Props) {
   const meshRef = useRef<THREE.Mesh>(null!);
   const { texture, aspect } = useSimpleVideoTexture(videoSrc);
 
-  const material = useMemo(() => {
-    const faceAspect = HALF.x / HALF.y;
-    let fit: [number, number];
-    if (aspect > faceAspect) {
-      fit = [faceAspect / aspect, 1];
-    } else {
-      fit = [1, aspect / faceAspect];
-    }
+  const stripTextureRef = useHistoryStrip({
+    videoTexture: texture,
+    videoAspect: aspect,
+    pillAspect: HALF.x / HALF.y,
+    scrollSpeed,
+    tiles,
+  });
 
+  const material = useMemo(() => {
     return new THREE.ShaderMaterial({
       vertexShader: vert,
       fragmentShader: frag,
       transparent: true,
       uniforms: {
-        uVideo: { value: texture },
-        uMotionDir: {
-          value: new THREE.Vector2(motionDir[0], motionDir[1]).normalize(),
-        },
-        uMotionStrength: { value: motionStrength },
-        uIor: { value: 1.42 },
-        uDispersion: { value: 0.012 },
-        uRefractStrength: { value: 0.22 },
+        uStrip: { value: stripTextureRef.current },
+        uSoftness: { value: 0.014 },
+        uIor: { value: 1.35 },
+        uRefractStrength: { value: 0.14 },
         uTint: { value: new THREE.Color(tint[0], tint[1], tint[2]) },
         uTime: { value: 0 },
         uHalfSize: { value: HALF.clone() },
-        uVideoAspectFit: { value: new THREE.Vector2(fit[0], fit[1]) },
       },
     });
-  }, [texture, aspect, motionDir, motionStrength, tint]);
+  }, [tint, stripTextureRef]);
 
   useFrame((state) => {
     const t = state.clock.elapsedTime;
     material.uniforms.uTime.value = t;
+    material.uniforms.uStrip.value = stripTextureRef.current;
     if (meshRef.current) {
-      meshRef.current.rotation.y = 0.22 + Math.sin(t * 0.5) * 0.05;
-      meshRef.current.rotation.x = -0.32 + Math.cos(t * 0.4) * 0.03;
+      meshRef.current.rotation.y = 0.42 + Math.sin(t * 0.35) * 0.02;
+      meshRef.current.rotation.x = -0.42 + Math.cos(t * 0.3) * 0.015;
     }
   });
 
@@ -127,7 +124,7 @@ export function Capsule(props: Props) {
     <Canvas
       dpr={[1, 2]}
       orthographic
-      camera={{ position: [0, 0, 6], zoom: 130 }}
+      camera={{ position: [0, 0, 6], zoom: 105 }}
       gl={{ alpha: true, antialias: true, premultipliedAlpha: false }}
       style={{ background: "transparent" }}
     >

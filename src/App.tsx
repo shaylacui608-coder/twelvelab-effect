@@ -13,9 +13,9 @@ export function App() {
             <div className="capsule-canvas">
               <Capsule
                 videoSrc={c.videoSrc}
-                motionDir={c.motionDir}
-                motionStrength={c.motionStrength}
                 tint={c.tint}
+                tiles={c.tiles}
+                scrollSpeed={c.scrollSpeed}
               />
             </div>
           </div>
