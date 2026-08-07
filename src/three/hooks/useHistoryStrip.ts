@@ -14,7 +14,6 @@ type Options = {
   pillAspect: number;
   scrollSpeed: number;
   pasteWidth: number;
-  pasteIntervalSec: number;
 };
 
 export function useHistoryStrip({
@@ -23,7 +22,6 @@ export function useHistoryStrip({
   pillAspect,
   scrollSpeed,
   pasteWidth,
-  pasteIntervalSec,
 }: Options) {
   const { gl } = useThree();
 
@@ -46,7 +44,6 @@ export function useHistoryStrip({
 
   const pingPong = useRef({ read: rts.a, write: rts.b });
   const outputTexture = useRef<THREE.Texture>(rts.a.texture);
-  const timeSincePasteRef = useRef(0);
 
   const scene = useMemo(() => new THREE.Scene(), []);
   const camera = useMemo(
@@ -63,7 +60,6 @@ export function useHistoryStrip({
         uVideo: { value: null },
         uShiftUv: { value: 0.005 },
         uPasteWidth: { value: 0.2 },
-        uPasteEnabled: { value: 0.0 },
         uVideoAspectFit: { value: new THREE.Vector2(1, 1) },
       },
     });
@@ -109,15 +105,9 @@ export function useHistoryStrip({
     const video = videoTexture.image as HTMLVideoElement | undefined;
     if (!video || video.readyState < 2) return;
 
-    timeSincePasteRef.current += delta;
-    const shouldPaste = timeSincePasteRef.current >= pasteIntervalSec;
-
     material.uniforms.uVideo.value = videoTexture;
     material.uniforms.uPrev.value = pingPong.current.read.texture;
     material.uniforms.uShiftUv.value = Math.min(delta * scrollSpeed, 0.06);
-    material.uniforms.uPasteEnabled.value = shouldPaste ? 1.0 : 0.0;
-
-    if (shouldPaste) timeSincePasteRef.current = 0;
 
     const prevRt = gl.getRenderTarget();
     gl.setRenderTarget(pingPong.current.write);

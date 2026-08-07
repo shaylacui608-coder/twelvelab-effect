@@ -12,12 +12,11 @@ type Props = {
   tint: [number, number, number];
   scrollSpeed?: number;
   pasteWidth?: number;
-  pasteIntervalMs?: number;
 };
 
 const HALF = new THREE.Vector2(1.4, 0.65);
-const SIZE: [number, number, number] = [HALF.x * 2, HALF.y * 2, 0.85];
-const RADIUS = 0.28;
+const SIZE: [number, number, number] = [HALF.x * 2, HALF.y * 2, 1.15];
+const RADIUS = 0.15;
 
 function useSimpleVideoTexture(src: string) {
   const [texture, setTexture] = useState<THREE.VideoTexture | null>(null);
@@ -71,9 +70,8 @@ function useSimpleVideoTexture(src: string) {
 function Mesh({
   videoSrc,
   tint,
-  scrollSpeed = 0.5,
+  scrollSpeed = 0.55,
   pasteWidth = 0.22,
-  pasteIntervalMs = 350,
 }: Props) {
   const meshRef = useRef<THREE.Mesh>(null!);
   const { texture, aspect } = useSimpleVideoTexture(videoSrc);
@@ -84,7 +82,6 @@ function Mesh({
     pillAspect: HALF.x / HALF.y,
     scrollSpeed,
     pasteWidth,
-    pasteIntervalSec: pasteIntervalMs / 1000,
   });
 
   const material = useMemo(() => {

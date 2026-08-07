@@ -16,7 +16,6 @@ export function App() {
                 tint={c.tint}
                 scrollSpeed={c.scrollSpeed}
                 pasteWidth={c.pasteWidth}
-                pasteIntervalMs={c.pasteIntervalMs}
               />
             </div>
           </div>
