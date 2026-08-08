@@ -13,9 +13,9 @@ type Props = {
   pasteWidth?: number;
 };
 
-const HALF = new THREE.Vector2(1.15, 0.65);
+const HALF = new THREE.Vector2(1.15, 0.50);
 const HALF_DEPTH = 1;
-const RADIUS = 0.6;
+const RADIUS = 0.4;
 
 function createLeftSideGeometry() {
   const halfZ = HALF_DEPTH;
@@ -36,9 +36,9 @@ function createLeftSideGeometry() {
   const geometry = new THREE.ExtrudeGeometry(shape, {
     depth: HALF.x * 2,
     bevelEnabled: true,
-    bevelThickness: 0.2,
-    bevelSize: 0.2,
-    bevelSegments: 20,
+    bevelThickness: 0.14,
+    bevelSize: 0.14,
+    bevelSegments: 24,
     curveSegments: 24,
     steps: 1,
   });

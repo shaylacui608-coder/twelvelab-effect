@@ -5,6 +5,7 @@ uniform float uIor;
 uniform float uRefractStrength;
 uniform vec3 uTint;
 uniform float uTime;
+uniform vec2 uHalfSize;
 uniform float uHalfDepth;
 uniform float uPasteWidth;
 
@@ -41,12 +42,16 @@ void main() {
   col *= uTint;
 
   float NdotV = clamp(dot(N, V), 0.0, 1.0);
-  float fresnel = pow(1.0 - NdotV, 3.5);
+  float fresnel = pow(1.0 - NdotV, 2.0);
+  float sheen = smoothstep(0.2, 1.0, N.y) * pow(1.0 - NdotV, 1.3);
+  col += vec3(0.85, 0.88, 0.92) * sheen * 0.55;
 
-  float sheen = smoothstep(0.15, 1.0, N.y) * pow(1.0 - NdotV, 1.2);
-  col += vec3(0.95, 0.96, 0.98) * sheen * 0.2;
+  vec3 rim = mix(vec3(1.0, 0.55, 0.35), vec3(0.4, 0.85, 1.0), (N.x + 1.0) * 0.5);
+  col += rim * fresnel * 0.60;
 
-  col += vec3(0.9, 0.92, 0.95) * fresnel * 0.08;
+  col = mix(col, col * 0.92 + 0.06, fresnel * 0.4);
 
-  gl_FragColor = vec4(col, 1.0);
+  float alpha = mix(0.94, 1.0, 1.0 - fresnel);
+
+  gl_FragColor = vec4(col, alpha);
 }
