@@ -1,6 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { Canvas, useFrame } from "@react-three/fiber";
-import { RoundedBox } from "@react-three/drei";
 import * as THREE from "three";
 
 import vert from "../three/shaders/capsule.vert.glsl";
@@ -14,9 +13,42 @@ type Props = {
   pasteWidth?: number;
 };
 
-const HALF = new THREE.Vector2(1.4, 0.65);
-const SIZE: [number, number, number] = [HALF.x * 2, HALF.y * 2, 1.15];
-const RADIUS = 0.15;
+const HALF = new THREE.Vector2(1.15, 0.65);
+const HALF_DEPTH = 1;
+const RADIUS = 0.6;
+
+function createLeftSideGeometry() {
+  const halfZ = HALF_DEPTH;
+  const halfY = HALF.y;
+  const radius = Math.min(RADIUS, halfZ, halfY);
+  const shape = new THREE.Shape();
+
+  shape.moveTo(-halfZ + radius, -halfY);
+  shape.lineTo(halfZ - radius, -halfY);
+  shape.quadraticCurveTo(halfZ, -halfY, halfZ, -halfY + radius);
+  shape.lineTo(halfZ, halfY - radius);
+  shape.quadraticCurveTo(halfZ, halfY, halfZ - radius, halfY);
+  shape.lineTo(-halfZ + radius, halfY);
+  shape.quadraticCurveTo(-halfZ, halfY, -halfZ, halfY - radius);
+  shape.lineTo(-halfZ, -halfY + radius);
+  shape.quadraticCurveTo(-halfZ, -halfY, -halfZ + radius, -halfY);
+
+  const geometry = new THREE.ExtrudeGeometry(shape, {
+    depth: HALF.x * 2,
+    bevelEnabled: true,
+    bevelThickness: 0.2,
+    bevelSize: 0.2,
+    bevelSegments: 20,
+    curveSegments: 24,
+    steps: 1,
+  });
+
+  geometry.translate(0, 0, -HALF.x);
+  geometry.rotateY(Math.PI / 2);
+  geometry.computeVertexNormals();
+
+  return geometry;
+}
 
 function useSimpleVideoTexture(src: string) {
   const [texture, setTexture] = useState<THREE.VideoTexture | null>(null);
@@ -75,6 +107,7 @@ function Mesh({
 }: Props) {
   const meshRef = useRef<THREE.Mesh>(null!);
   const { texture, aspect } = useSimpleVideoTexture(videoSrc);
+  const geometry = useMemo(() => createLeftSideGeometry(), []);
 
   const stripTextureRef = useHistoryStrip({
     videoTexture: texture,
@@ -96,28 +129,26 @@ function Mesh({
         uTint: { value: new THREE.Color(tint[0], tint[1], tint[2]) },
         uTime: { value: 0 },
         uHalfSize: { value: HALF.clone() },
+        uHalfDepth: { value: HALF_DEPTH },
+        uPasteWidth: { value: pasteWidth },
       },
     });
-  }, [tint, stripTextureRef]);
+  }, [tint, pasteWidth, stripTextureRef]);
 
   useFrame((state) => {
     const t = state.clock.elapsedTime;
     material.uniforms.uTime.value = t;
     material.uniforms.uStrip.value = stripTextureRef.current;
     if (meshRef.current) {
-      meshRef.current.rotation.y = 0.3 + Math.sin(t * 0.3) * 0.015;
-      meshRef.current.rotation.x = -0.34 + Math.cos(t * 0.28) * 0.01;
+      meshRef.current.rotation.y = 0.6 + Math.sin(t * 0.3) * 0.015;
+      meshRef.current.rotation.x = 0.34 + Math.cos(t * 0.28) * 0.01;
     }
   });
 
   return (
-    <RoundedBox
+    <mesh
       ref={meshRef}
-      args={SIZE}
-      radius={RADIUS}
-      smoothness={10}
-      bevelSegments={10}
-      creaseAngle={0.9}
+      geometry={geometry}
       material={material}
     />
   );
