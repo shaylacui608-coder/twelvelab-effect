@@ -91,7 +91,21 @@ body {
 
 .capsule-canvas {
   width: 100%;
-  aspect-ratio: 2.2 / 1;
+  aspect-ratio: 1.45 / 1;
+  min-height: 280px;
   filter: drop-shadow(0 26px 30px rgba(0, 0, 0, 0.15))
           drop-shadow(0 8px 12px rgba(0, 0, 0, 0.06));
+}
+
+@media (max-width: 900px) {
+  .capsule-canvas {
+    aspect-ratio: 1.35 / 1;
+    min-height: 260px;
+  }
+}
+
+@media (max-width: 560px) {
+  .capsule-canvas {
+    min-height: 320px;
+  }
 }

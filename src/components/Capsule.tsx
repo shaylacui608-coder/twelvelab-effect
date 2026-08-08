@@ -1,9 +1,12 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { Canvas, useFrame } from "@react-three/fiber";
 import * as THREE from "three";
+import { mergeVertices } from "three/examples/jsm/utils/BufferGeometryUtils.js";
 
 import vert from "../three/shaders/capsule.vert.glsl";
 import frag from "../three/shaders/capsule.frag.glsl";
+import edgeVert from "../three/shaders/edge.vert.glsl";
+import edgeFrag from "../three/shaders/edge.frag.glsl";
 import { useHistoryStrip } from "../three/hooks/useHistoryStrip";
 
 type Props = {
@@ -13,9 +16,9 @@ type Props = {
   pasteWidth?: number;
 };
 
-const HALF = new THREE.Vector2(1.15, 0.50);
-const HALF_DEPTH = 1;
-const RADIUS = 0.4;
+const HALF = new THREE.Vector2(0.90, 0.48);
+const HALF_DEPTH = 1.1;
+const RADIUS = 0.36;
 
 function createLeftSideGeometry() {
   const halfZ = HALF_DEPTH;
@@ -36,18 +39,22 @@ function createLeftSideGeometry() {
   const geometry = new THREE.ExtrudeGeometry(shape, {
     depth: HALF.x * 2,
     bevelEnabled: true,
-    bevelThickness: 0.14,
-    bevelSize: 0.14,
-    bevelSegments: 24,
+    bevelThickness: 0.18,
+    bevelSize: 0.18,
+    bevelSegments: 32,
     curveSegments: 24,
     steps: 1,
   });
 
   geometry.translate(0, 0, -HALF.x);
   geometry.rotateY(Math.PI / 2);
-  geometry.computeVertexNormals();
+  geometry.deleteAttribute("normal");
+  geometry.deleteAttribute("uv");
 
-  return geometry;
+  const smoothGeometry = mergeVertices(geometry, 0.001);
+  smoothGeometry.computeVertexNormals();
+
+  return smoothGeometry;
 }
 
 function useSimpleVideoTexture(src: string) {
@@ -105,7 +112,7 @@ function Mesh({
   scrollSpeed = 0.55,
   pasteWidth = 0.22,
 }: Props) {
-  const meshRef = useRef<THREE.Mesh>(null!);
+  const groupRef = useRef<THREE.Group>(null!);
   const { texture, aspect } = useSimpleVideoTexture(videoSrc);
   const geometry = useMemo(() => createLeftSideGeometry(), []);
 
@@ -135,22 +142,48 @@ function Mesh({
     });
   }, [tint, pasteWidth, stripTextureRef]);
 
+  const edgeMaterial = useMemo(() => {
+    return new THREE.ShaderMaterial({
+      vertexShader: edgeVert,
+      fragmentShader: edgeFrag,
+      transparent: true,
+      side: THREE.FrontSide,
+      depthWrite: false,
+      blending: THREE.AdditiveBlending,
+      uniforms: {
+        uEdgeColor: { value: new THREE.Color(1.0, 0.96, 0.88) },
+        uEdgeStrength: { value: 0.38 },
+        uEdgePower: { value: 2.8 },
+        uHalfSize: { value: HALF.clone() },
+        uHalfDepth: { value: HALF_DEPTH },
+        uNormalCurve: { value: 0.40 },
+      },
+    });
+  }, []);
+
   useFrame((state) => {
     const t = state.clock.elapsedTime;
     material.uniforms.uTime.value = t;
     material.uniforms.uStrip.value = stripTextureRef.current;
-    if (meshRef.current) {
-      meshRef.current.rotation.y = 0.6 + Math.sin(t * 0.3) * 0.015;
-      meshRef.current.rotation.x = 0.34 + Math.cos(t * 0.28) * 0.01;
+    if (groupRef.current) {
+      groupRef.current.rotation.y = 0.6 + Math.sin(t * 0.3) * 0.015;
+      groupRef.current.rotation.x = 0.34 + Math.cos(t * 0.28) * 0.01;
     }
   });
 
   return (
-    <mesh
-      ref={meshRef}
-      geometry={geometry}
-      material={material}
-    />
+    <group ref={groupRef}>
+      <mesh
+        geometry={geometry}
+        material={material}
+      />
+      <mesh
+        geometry={geometry}
+        material={edgeMaterial}
+        renderOrder={2}
+        scale={1.004}
+      />
+    </group>
   );
 }
 
