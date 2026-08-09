@@ -9,7 +9,7 @@ export type CapsuleSpec = {
 export const CAPSULES: CapsuleSpec[] = [
   {
     label: "Off-road dirt bike on a dirt track",
-    videoSrc: "/clips/dirt-bike.webm",
+    videoSrc: "/clips/video1.MOV",
     tint: [1.0, 0.98, 0.92],
     scrollSpeed: 0.55,
   },
@@ -21,25 +21,25 @@ export const CAPSULES: CapsuleSpec[] = [
   },
   {
     label: "Red robotic arm in action",
-    videoSrc: "/clips/robot-arm.webm",
+    videoSrc: "/clips/video3.mov",
     tint: [1.05, 0.96, 0.92],
     scrollSpeed: 0.6,
   },
   {
     label: "Fantasy RPG cutscene",
-    videoSrc: "/clips/fantasy.webm",
+    videoSrc: "/clips/video4.MOV",
     tint: [0.96, 0.96, 1.08],
     scrollSpeed: 0.45,
   },
   {
     label: "Green tennis ball bouncing on the court",
-    videoSrc: "/clips/tennis.webm",
+    videoSrc: "/clips/video5.MOV",
     tint: [0.98, 1.02, 0.95],
     scrollSpeed: 0.5,
   },
   {
     label: "Street-view scene of Shibuya",
-    videoSrc: "/clips/shibuya.webm",
+    videoSrc: "/clips/video6.MOV",
     tint: [1.0, 1.0, 1.0],
     scrollSpeed: 0.55,
   },

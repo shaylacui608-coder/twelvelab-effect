@@ -7,6 +7,7 @@ import historyFrag from "../shaders/history.frag.glsl";
 
 const STRIP_W = 512;
 const STRIP_H = 128;
+const MAX_HISTORY_DELTA = 1 / 30;
 
 type Options = {
   videoTexture: THREE.VideoTexture | null;
@@ -103,11 +104,19 @@ export function useHistoryStrip({
   useFrame((_, delta) => {
     if (!videoTexture) return;
     const video = videoTexture.image as HTMLVideoElement | undefined;
-    if (!video || video.readyState < 2) return;
+    if (
+      !video ||
+      video.readyState < HTMLMediaElement.HAVE_FUTURE_DATA ||
+      !video.videoWidth ||
+      !video.videoHeight ||
+      video.seeking
+    ) {
+      return;
+    }
 
     material.uniforms.uVideo.value = videoTexture;
     material.uniforms.uPrev.value = pingPong.current.read.texture;
-    material.uniforms.uShiftUv.value = Math.min(delta * scrollSpeed, 0.06);
+    material.uniforms.uShiftUv.value = Math.min(delta, MAX_HISTORY_DELTA) * scrollSpeed;
 
     const prevRt = gl.getRenderTarget();
     gl.setRenderTarget(pingPong.current.write);
