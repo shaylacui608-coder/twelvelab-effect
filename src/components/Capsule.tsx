@@ -192,7 +192,7 @@ export function Capsule(props: Props) {
     <Canvas
       dpr={[1, 2]}
       orthographic
-      camera={{ position: [0, 0, 6], zoom: 115 }}
+      camera={{ position: [0, 0, 6], zoom: 104 }}
       gl={{ alpha: true, antialias: true, premultipliedAlpha: false }}
       style={{ background: "transparent" }}
     >

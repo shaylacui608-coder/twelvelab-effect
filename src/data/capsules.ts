@@ -15,7 +15,7 @@ export const CAPSULES: CapsuleSpec[] = [
   },
   {
     label: "Woman running uphill with red roses",
-    videoSrc: "/clips/dancers.webm",
+    videoSrc: "/clips/video2.mov",
     tint: [1.02, 0.99, 0.97],
     scrollSpeed: 0.55,
   },
@@ -39,7 +39,7 @@ export const CAPSULES: CapsuleSpec[] = [
   },
   {
     label: "Street-view scene of Shibuya",
-    videoSrc: "/clips/video6.MOV",
+    videoSrc: "/clips/video6.mp4",
     tint: [1.0, 1.0, 1.0],
     scrollSpeed: 0.55,
   },

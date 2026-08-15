@@ -1,9 +1,11 @@
 :root {
-  --page-bg: #f2f0ec;
-  --ink: #1a1a1a;
-  --hairline: rgba(26, 26, 26, 0.28);
-  --pill-bg: rgba(255, 255, 255, 0.55);
-  --pill-text: rgba(26, 26, 26, 0.82);
+  --page-bg: #ffffff;
+  --paper: #ffffff;
+  --frost: rgba(255, 255, 255, 0.76);
+  --frost-strong: rgba(255, 255, 255, 0.94);
+  --shadow: rgba(132, 142, 150, 0.08);
+  --shadow-soft: rgba(132, 142, 150, 0.035);
+  --line: rgba(120, 130, 138, 0.10);
   font-family:
     "Inter", "Söhne", "Neue Haas Grotesk", -apple-system, BlinkMacSystemFont,
     "Segoe UI", Helvetica, Arial, sans-serif;
@@ -15,97 +17,372 @@
 
 html, body, #root {
   margin: 0;
-  padding: 0;
   min-height: 100%;
   background: var(--page-bg);
-  color: var(--ink);
 }
 
 body {
   background:
-    radial-gradient(120% 60% at 50% 10%, #f7f5f0 0%, var(--page-bg) 60%);
+    radial-gradient(760px 380px at 50% 18%, rgba(255, 255, 255, 1), transparent 72%),
+    radial-gradient(560px 340px at 88% 12%, rgba(244, 249, 252, 0.56), transparent 72%),
+    radial-gradient(620px 360px at 14% 86%, rgba(250, 252, 253, 0.64), transparent 70%),
+    linear-gradient(180deg, #ffffff 0%, #f8fafb 100%);
 }
 
 .page {
-  max-width: 1400px;
-  margin: 0 auto;
-  padding: 72px 40px 120px;
+  min-height: 100vh;
+  padding: 0;
+  overflow: hidden;
 }
 
-.page__lede {
-  font-size: 12px;
-  letter-spacing: 0.14em;
+.archive-frame {
+  position: relative;
+  width: 100vw;
+  min-height: 100vh;
+  margin: 0;
+  overflow: hidden;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 1), rgba(252, 254, 255, 0.94)),
+    radial-gradient(720px 380px at 24% 15%, rgba(255, 255, 255, 1), transparent 74%),
+    #ffffff;
+  border: 0;
+  box-shadow:
+    0 1px 0 rgba(255, 255, 255, 1) inset,
+    0 18px 70px rgba(133, 143, 151, 0.08);
+}
+
+.archive-frame::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    linear-gradient(90deg, rgba(190, 202, 210, 0.06), transparent 18%, transparent 84%, rgba(190, 202, 210, 0.04)),
+    linear-gradient(180deg, transparent 0%, rgba(255, 255, 255, 0.82) 56%, transparent 100%);
+  mix-blend-mode: normal;
+}
+
+.archive-frame::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(520px 240px at 26% 34%, rgba(255, 255, 255, 0.88), transparent 76%),
+    radial-gradient(560px 260px at 72% 22%, rgba(247, 251, 253, 0.54), transparent 78%),
+    radial-gradient(520px 280px at 64% 72%, rgba(255, 255, 255, 0.72), transparent 78%);
+}
+
+.archive-frame__grain {
+  position: absolute;
+  inset: 0;
+  opacity: 0.035;
+  pointer-events: none;
+  background-image:
+    radial-gradient(circle at 30% 40%, rgba(170, 182, 190, 0.16) 0 0.5px, transparent 0.9px),
+    radial-gradient(circle at 70% 62%, rgba(255, 255, 255, 0.9) 0 0.7px, transparent 1px);
+  background-size: 28px 28px, 43px 43px;
+  mix-blend-mode: soft-light;
+}
+
+.archive-title {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  align-items: baseline;
+  gap: 18px;
+  height: 86px;
+  padding: 28px 6% 0;
+  pointer-events: none;
+}
+
+.archive-title p {
+  margin: 0;
+  color: rgba(68, 78, 84, 0.42);
+  font-size: 9px;
+  font-weight: 740;
+  letter-spacing: 0.18em;
   text-transform: uppercase;
-  opacity: 0.55;
-  margin: 0 0 48px;
 }
 
-.grid {
+.archive-title h1 {
+  margin: 0;
+  color: rgba(21, 24, 26, 0.82);
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: clamp(32px, 4.2vw, 58px);
+  font-weight: 400;
+  letter-spacing: 0;
+  line-height: 0.92;
+}
+
+.shelf {
+  position: relative;
+  z-index: 1;
+  height: 338px;
+}
+
+.shelf--1 {
+  margin-top: -4px;
+}
+
+.shelf--2 {
+  margin-top: -34px;
+}
+
+.shelf__back,
+.shelf__surface,
+.shelf__front {
+  position: absolute;
+  pointer-events: none;
+}
+
+.shelf__back {
+  left: 0;
+  right: 0;
+  top: 58px;
+  height: 172px;
+  background:
+    linear-gradient(178deg, rgba(255, 255, 255, 1), rgba(247, 250, 252, 0.88)),
+    linear-gradient(90deg, transparent, rgba(198, 210, 218, 0.10), transparent);
+  clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
+  box-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.95) inset,
+    0 20px 44px rgba(132, 142, 150, 0.045);
+}
+
+.shelf__surface {
+  left: 0;
+  right: 0;
+  top: 192px;
+  height: 76px;
+  background:
+    radial-gradient(ellipse at 16.5% 14%, rgba(94, 108, 118, 0.12), transparent 18%),
+    radial-gradient(ellipse at 50% 14%, rgba(94, 108, 118, 0.105), transparent 18%),
+    radial-gradient(ellipse at 83.5% 14%, rgba(94, 108, 118, 0.10), transparent 18%),
+    linear-gradient(178deg, rgba(255, 255, 255, 1), rgba(242, 247, 250, 0.92)),
+    radial-gradient(880px 80px at 50% 0%, rgba(255, 255, 255, 1), transparent 68%);
+  clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
+  border-top: 1px solid rgba(210, 222, 230, 0.32);
+  box-shadow:
+    0 1px 0 rgba(255, 255, 255, 1) inset,
+    0 -1px 0 rgba(148, 160, 168, 0.16) inset,
+    0 28px 54px rgba(132, 142, 150, 0.065);
+}
+
+.shelf__surface::after {
+  content: none;
+  position: absolute;
+  left: 7%;
+  right: 7%;
+  top: 68px;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(104, 118, 128, 0.22), transparent);
+}
+
+.shelf__surface::before {
+  content: "";
+  position: absolute;
+  left: 3%;
+  right: 3%;
+  bottom: -72px;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(118, 130, 138, 0.18), transparent);
+}
+
+.shelf__front {
+  left: 0;
+  right: 0;
+  top: 268px;
+  height: 72px;
+  background:
+    linear-gradient(180deg, rgba(238, 244, 247, 0.92), rgba(255, 255, 255, 0.86)),
+    linear-gradient(90deg, rgba(190, 204, 214, 0.18), transparent 28%, transparent 78%, rgba(190, 204, 214, 0.14));
+  clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
+  box-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.92) inset,
+    0 -1px 0 rgba(148, 160, 168, 0.10) inset,
+    0 26px 56px rgba(132, 142, 150, 0.065);
+}
+
+.shelf__front::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  height: 18px;
+  background:
+    linear-gradient(180deg, rgba(176, 192, 204, 0.18), transparent 78%),
+    linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.78), transparent);
+}
+
+.shelf--2 .shelf__surface {
+  top: 207px;
+  height: 76px;
+  background:
+    radial-gradient(ellipse at 16.5% 14%, rgba(94, 108, 118, 0.115), transparent 18%),
+    radial-gradient(ellipse at 50% 14%, rgba(94, 108, 118, 0.105), transparent 18%),
+    radial-gradient(ellipse at 83.5% 14%, rgba(94, 108, 118, 0.10), transparent 18%),
+    linear-gradient(178deg, rgba(255, 255, 255, 1), rgba(242, 247, 250, 0.92)),
+    radial-gradient(880px 80px at 50% 0%, rgba(255, 255, 255, 1), transparent 68%);
+}
+
+.shelf--2 .shelf__front {
+  top: 283px;
+}
+
+.specimen-row {
+  position: absolute;
+  left: 6%;
+  right: 6%;
+  top: 48px;
+  z-index: 2;
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 56px 40px;
+  gap: clamp(24px, 5vw, 92px);
+  align-items: end;
 }
 
-@media (max-width: 900px) {
-  .grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 40px 24px; }
-  .page { padding: 40px 20px 80px; }
+.shelf--2 .specimen-row {
+  top: 60px;
+  left: 8%;
+  right: 8%;
 }
 
-@media (max-width: 560px) {
-  .grid { grid-template-columns: 1fr; }
+.specimen {
+  --delay: 0ms;
+  position: relative;
+  min-width: 0;
+  height: 292px;
+  animation: specimen-in 780ms cubic-bezier(0.19, 1, 0.22, 1) both;
+  animation-delay: var(--delay);
 }
 
-.cell {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 10px;
+.specimen__stage {
+  position: relative;
+  height: 230px;
+  animation: soft-float 6.2s ease-in-out infinite;
+  animation-delay: calc(var(--delay) * -1);
 }
 
-.caption {
-  display: inline-flex;
-  align-items: center;
-  gap: 0;
-  flex-direction: column;
-}
-
-.caption__tick {
-  width: 1px;
-  height: 22px;
-  background: var(--hairline);
-  order: 2;
-}
-
-.caption__pill {
-  order: 1;
-  font-size: 10.5px;
-  letter-spacing: 0.09em;
-  text-transform: uppercase;
-  padding: 5px 11px 4px;
+.specimen__stage::before {
+  content: "";
+  position: absolute;
+  left: 18%;
+  right: 18%;
+  bottom: 12px;
+  height: 34px;
   border-radius: 999px;
-  border: 1px solid var(--hairline);
-  background: var(--pill-bg);
-  color: var(--pill-text);
-  white-space: nowrap;
+  background:
+    radial-gradient(ellipse at 48% 48%, rgba(255, 255, 255, 0.62), transparent 55%),
+    rgba(78, 90, 100, 0.15);
+  filter: blur(12px);
+  opacity: 0.84;
+  transform: skewX(-12deg);
 }
 
 .capsule-canvas {
+  position: relative;
+  z-index: 1;
   width: 100%;
-  aspect-ratio: 1.45 / 1;
-  min-height: 280px;
-  filter: drop-shadow(0 26px 30px rgba(0, 0, 0, 0.15))
-          drop-shadow(0 8px 12px rgba(0, 0, 0, 0.06));
+  height: 230px;
+  filter:
+    brightness(1.08)
+    drop-shadow(0 18px 20px rgba(99, 109, 116, 0.13))
+    drop-shadow(0 0 28px rgba(255, 255, 255, 0.42));
 }
 
-@media (max-width: 900px) {
-  .capsule-canvas {
-    aspect-ratio: 1.35 / 1;
-    min-height: 260px;
+.specimen__plate {
+  display: grid;
+  place-items: center;
+  width: clamp(128px, 42%, 178px);
+  height: 34px;
+  margin: 6px auto 0;
+  border: 1px solid rgba(68, 78, 84, 0.38);
+  border-radius: 2px;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.98), rgba(249, 252, 253, 0.84));
+  box-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.96) inset,
+    0 8px 18px rgba(132, 142, 150, 0.045);
+}
+
+.specimen__plate span {
+  color: rgba(68, 78, 84, 0.52);
+  font-size: 8px;
+  font-weight: 760;
+  letter-spacing: 0.13em;
+  white-space: nowrap;
+}
+
+@keyframes specimen-in {
+  from {
+    opacity: 0;
+    transform: translateY(24px) scale(0.96);
+    filter: blur(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    filter: blur(0);
   }
 }
 
-@media (max-width: 560px) {
+@keyframes soft-float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-2px); }
+}
+
+@media (max-width: 980px) {
+  .page {
+    padding: 0;
+  }
+
+  .archive-frame {
+    min-height: 1040px;
+  }
+
+  .shelf {
+    height: 456px;
+  }
+
+  .shelf__back {
+    top: 70px;
+    height: 300px;
+    clip-path: polygon(0 0, 100% 0, 96% 100%, 0 100%);
+  }
+
+  .shelf__surface {
+    top: 350px;
+  }
+
+  .shelf__front {
+    top: 428px;
+  }
+
+  .specimen-row,
+  .shelf--2 .specimen-row {
+    left: 6%;
+    right: 6%;
+    top: 56px;
+    grid-template-columns: 1fr;
+    gap: 18px;
+  }
+
+  .specimen {
+    height: 196px;
+  }
+
+  .specimen__stage {
+    height: 142px;
+  }
+
   .capsule-canvas {
-    min-height: 320px;
+    height: 142px;
+  }
+
+  .specimen__plate {
+    height: 28px;
+    margin-top: 12px;
   }
 }
