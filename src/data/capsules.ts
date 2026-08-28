@@ -33,7 +33,7 @@ export const CAPSULES: CapsuleSpec[] = [
   },
   {
     label: "Green tennis ball bouncing on the court",
-    videoSrc: "/clips/video5.MOV",
+    videoSrc: "/clips/IMG_2392.mov",
     tint: [0.98, 1.02, 0.95],
     scrollSpeed: 0.5,
   },

@@ -14,16 +14,20 @@ type Props = {
   tint: [number, number, number];
   scrollSpeed?: number;
   pasteWidth?: number;
+  radius?: number;
+  cameraZoom?: number;
+  thicknessScale?: number;
+  reflectionStrength?: number;
 };
 
 const HALF = new THREE.Vector2(0.90, 0.48);
 const HALF_DEPTH = 1.1;
-const RADIUS = 0.36;
+const DEFAULT_RADIUS = 0.36;
 
-function createLeftSideGeometry() {
+function createLeftSideGeometry(radiusValue = DEFAULT_RADIUS) {
   const halfZ = HALF_DEPTH;
   const halfY = HALF.y;
-  const radius = Math.min(RADIUS, halfZ, halfY);
+  const radius = Math.min(radiusValue, halfZ, halfY);
   const shape = new THREE.Shape();
 
   shape.moveTo(-halfZ + radius, -halfY);
@@ -111,10 +115,17 @@ function Mesh({
   tint,
   scrollSpeed = 0.55,
   pasteWidth = 0.22,
+  radius = DEFAULT_RADIUS,
+  thicknessScale = 1,
+  reflectionStrength = 1,
 }: Props) {
   const groupRef = useRef<THREE.Group>(null!);
   const { texture, aspect } = useSimpleVideoTexture(videoSrc);
-  const geometry = useMemo(() => createLeftSideGeometry(), []);
+  const geometry = useMemo(() => createLeftSideGeometry(radius), [radius]);
+
+  useEffect(() => {
+    return () => geometry.dispose();
+  }, [geometry]);
 
   const stripTextureRef = useHistoryStrip({
     videoTexture: texture,
@@ -152,14 +163,15 @@ function Mesh({
       blending: THREE.AdditiveBlending,
       uniforms: {
         uEdgeColor: { value: new THREE.Color(1.0, 0.96, 0.88) },
-        uEdgeStrength: { value: 0.38 },
+        uEdgeStrength: { value: 0.38 * reflectionStrength },
         uEdgePower: { value: 2.8 },
+        uHairlineStrength: { value: 0.16 * reflectionStrength },
         uHalfSize: { value: HALF.clone() },
         uHalfDepth: { value: HALF_DEPTH },
         uNormalCurve: { value: 0.40 },
       },
     });
-  }, []);
+  }, [reflectionStrength]);
 
   useFrame((state) => {
     const t = state.clock.elapsedTime;
@@ -172,7 +184,7 @@ function Mesh({
   });
 
   return (
-    <group ref={groupRef}>
+    <group ref={groupRef} scale={[1, thicknessScale, 1]}>
       <mesh
         geometry={geometry}
         material={material}
@@ -188,11 +200,13 @@ function Mesh({
 }
 
 export function Capsule(props: Props) {
+  const { cameraZoom = 104 } = props;
+
   return (
     <Canvas
       dpr={[1, 2]}
       orthographic
-      camera={{ position: [0, 0, 6], zoom: 104 }}
+      camera={{ position: [0, 0, 6], zoom: cameraZoom }}
       gl={{ alpha: true, antialias: true, premultipliedAlpha: false }}
       style={{ background: "transparent" }}
     >
