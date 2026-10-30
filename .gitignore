@@ -5,3 +5,5 @@ dist
 .vite
 .pnpm-store
 *.tsbuildinfo
+.vercel
+.env*

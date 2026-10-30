@@ -18,6 +18,9 @@ type Props = {
   cameraZoom?: number;
   thicknessScale?: number;
   reflectionStrength?: number;
+  /** Bigger ping-pong buffer for high-resolution presentations (museum). */
+  stripSize?: [number, number];
+  castShadow?: boolean;
 };
 
 const HALF = new THREE.Vector2(0.90, 0.48);
@@ -61,9 +64,10 @@ function createLeftSideGeometry(radiusValue = DEFAULT_RADIUS) {
   return smoothGeometry;
 }
 
-function useSimpleVideoTexture(src: string) {
+function useSimpleVideoTexture(src: string, paused = false) {
   const [texture, setTexture] = useState<THREE.VideoTexture | null>(null);
   const [aspect, setAspect] = useState<number>(16 / 9);
+  const videoRef = useRef<HTMLVideoElement | null>(null);
 
   useEffect(() => {
     const video = document.createElement("video");
@@ -79,6 +83,7 @@ function useSimpleVideoTexture(src: string) {
     video.style.cssText =
       "position:absolute;width:1px;height:1px;opacity:0;pointer-events:none;left:-10px;top:-10px;";
     document.body.appendChild(video);
+    videoRef.current = video;
 
     const tex = new THREE.VideoTexture(video);
     tex.colorSpace = THREE.SRGBColorSpace;
@@ -104,11 +109,26 @@ function useSimpleVideoTexture(src: string) {
       video.load();
       if (video.parentNode) video.parentNode.removeChild(video);
       tex.dispose();
+      videoRef.current = null;
     };
   }, [src]);
 
+  // Pause / resume video decoding on demand — saves CPU + battery when a
+  // capsule is off-camera or overshadowed by a focused sibling.
+  useEffect(() => {
+    const v = videoRef.current;
+    if (!v) return;
+    if (paused) {
+      v.pause();
+    } else {
+      v.play().catch(() => {});
+    }
+  }, [paused]);
+
   return { texture, aspect };
 }
+
+type MeshProps = Props & { autoRotate?: boolean; paused?: boolean };
 
 function Mesh({
   videoSrc,
@@ -118,9 +138,13 @@ function Mesh({
   radius = DEFAULT_RADIUS,
   thicknessScale = 1,
   reflectionStrength = 1,
-}: Props) {
+  autoRotate = true,
+  stripSize,
+  paused = false,
+  castShadow = false,
+}: MeshProps) {
   const groupRef = useRef<THREE.Group>(null!);
-  const { texture, aspect } = useSimpleVideoTexture(videoSrc);
+  const { texture, aspect } = useSimpleVideoTexture(videoSrc, paused);
   const geometry = useMemo(() => createLeftSideGeometry(radius), [radius]);
 
   useEffect(() => {
@@ -133,6 +157,8 @@ function Mesh({
     pillAspect: HALF.x / HALF.y,
     scrollSpeed,
     pasteWidth,
+    stripSize,
+    paused,
   });
 
   const material = useMemo(() => {
@@ -177,7 +203,7 @@ function Mesh({
     const t = state.clock.elapsedTime;
     material.uniforms.uTime.value = t;
     material.uniforms.uStrip.value = stripTextureRef.current;
-    if (groupRef.current) {
+    if (groupRef.current && autoRotate) {
       groupRef.current.rotation.y = 0.6 + Math.sin(t * 0.3) * 0.015;
       groupRef.current.rotation.x = 0.34 + Math.cos(t * 0.28) * 0.01;
     }
@@ -186,6 +212,7 @@ function Mesh({
   return (
     <group ref={groupRef} scale={[1, thicknessScale, 1]}>
       <mesh
+        castShadow={castShadow}
         geometry={geometry}
         material={material}
       />
@@ -198,6 +225,9 @@ function Mesh({
     </group>
   );
 }
+
+/** Headless capsule mesh — no Canvas of its own. Drop it into a shared scene. */
+export const CapsuleMesh = Mesh;
 
 export function Capsule(props: Props) {
   const { cameraZoom = 104 } = props;

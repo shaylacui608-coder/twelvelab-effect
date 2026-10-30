@@ -1,4 +1,5 @@
 @import url("https://fonts.googleapis.com/css2?family=Iceberg&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Archivo+Black&display=swap");
 
 :root {
   --page-bg: #ffffff;
@@ -779,53 +780,31 @@ body {
 }
 
 .phone-capsule__platform {
+  /* A pool of warm light on the "floor" — no border, no shape, no cast shadow.
+     It's the light itself, dissolving into the dark background at the edges. */
   position: absolute;
   z-index: 0;
-  left: 9%;
-  right: 7%;
-  bottom: 34px;
-  height: 92px;
-  border-radius: 34px;
-  background:
-    radial-gradient(ellipse at 28% 18%, rgba(255, 255, 255, 0.45), transparent 54%),
-    radial-gradient(ellipse at 76% 74%, rgba(255, 185, 96, 0.14), transparent 60%),
-    linear-gradient(165deg, rgba(255, 255, 255, 0.20), rgba(255, 255, 255, 0.04) 58%, rgba(17, 19, 22, 0.18));
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  box-shadow:
-    0 1px 0 rgba(255, 255, 255, 0.34) inset,
-    0 -18px 46px rgba(255, 255, 255, 0.10) inset,
-    0 22px 42px rgba(0, 0, 0, 0.26);
-  transform: perspective(320px) rotateX(58deg) rotateZ(-4deg);
-  transform-origin: center bottom;
-  pointer-events: none;
-}
-
-.phone-capsule__platform::before {
-  content: "";
-  position: absolute;
-  left: 7%;
-  right: 6%;
-  bottom: -13px;
-  height: 24px;
-  border-radius: 0 0 28px 28px;
-  background:
-    linear-gradient(180deg, rgba(255, 255, 255, 0.12), rgba(6, 7, 9, 0.24)),
-    radial-gradient(ellipse at 34% 0%, rgba(255, 231, 198, 0.18), transparent 68%);
-  filter: blur(0.4px);
-  opacity: 0.72;
-}
-
-.phone-capsule__platform::after {
-  content: "";
-  position: absolute;
-  left: 12%;
-  right: 10%;
-  bottom: 12px;
-  height: 20px;
+  left: 4%;
+  right: 4%;
+  bottom: 30px;
+  height: 130px;
+  border: none;
   border-radius: 999px;
-  background: rgba(255, 255, 255, 0.20);
-  filter: blur(13px);
-  opacity: 0.7;
+  transform: none;
+  pointer-events: none;
+  background: radial-gradient(
+    ellipse 56% 62% at 50% 46%,
+    rgba(255, 232, 194, 0.34) 0%,
+    rgba(255, 210, 148, 0.22) 22%,
+    rgba(200, 168, 108, 0.10) 48%,
+    transparent 78%
+  );
+  filter: blur(4px);
+}
+
+.phone-capsule__platform::before,
+.phone-capsule__platform::after {
+  content: none;
 }
 
 .phone-capsule__halo {
@@ -886,33 +865,101 @@ body {
 }
 
 .phone-capsule--memory::after {
-  left: 17%;
-  right: 15%;
-  bottom: 58px;
-  height: 38px;
-  background:
-    radial-gradient(ellipse at 36% 50%, rgba(0, 0, 0, 0.44), transparent 62%),
-    rgba(255, 204, 126, 0.13);
-  filter: blur(18px);
-  opacity: 0.76;
+  /* Vertical soft reflection under the pill — polished-floor hint, not a
+     shadow. Barely there. */
+  left: 22%;
+  right: 22%;
+  bottom: 24px;
+  height: 84px;
+  background: linear-gradient(
+    180deg,
+    rgba(255, 232, 200, 0.18) 0%,
+    rgba(255, 220, 180, 0.08) 30%,
+    transparent 90%
+  );
+  filter: blur(10px);
+  opacity: 0.85;
+  transform: none;
+  border-radius: 999px 999px 40% 40% / 999px 999px 60% 60%;
 }
 
 .phone-capsule--memory .phone-capsule__platform {
-  left: 8%;
-  right: 5%;
-  bottom: 44px;
-  height: 104px;
+  /* Environment, not surface — the "polished dark room" reading.
+     Faint horizontal light traces suggest a distant off-camera light source
+     grazing the floor, and a barely-there warm ambient sits below the pill.
+     Nothing hard, nothing bright — you feel a floor without seeing one. */
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 210px;
+  border: none;
+  box-shadow: none;
   background:
-    radial-gradient(ellipse at 24% 16%, rgba(255, 255, 255, 0.34), transparent 54%),
-    radial-gradient(ellipse at 18% 88%, rgba(255, 189, 92, 0.22), transparent 48%),
-    radial-gradient(ellipse at 86% 72%, rgba(120, 176, 77, 0.16), transparent 54%),
-    linear-gradient(160deg, rgba(255, 255, 255, 0.16), rgba(255, 255, 255, 0.04) 58%, rgba(0, 0, 0, 0.22));
-  border-color: rgba(255, 255, 255, 0.10);
-  box-shadow:
-    0 1px 0 rgba(255, 255, 255, 0.26) inset,
-    0 -20px 44px rgba(255, 255, 255, 0.08) inset,
-    0 26px 54px rgba(0, 0, 0, 0.34),
-    0 0 52px rgba(255, 196, 98, 0.10);
+    /* Wide, low ambient warmth right under the pill's base */
+    radial-gradient(
+      ellipse 40% 30% at 50% 48%,
+      rgba(255, 208, 150, 0.16) 0%,
+      rgba(255, 190, 128, 0.08) 40%,
+      transparent 78%
+    ),
+    /* Cool bleed from the right — connects to the phone card's green glow */
+    radial-gradient(
+      ellipse 55% 40% at 82% 40%,
+      rgba(120, 160, 90, 0.09) 0%,
+      transparent 70%
+    ),
+    /* Cool bleed from the left corner */
+    radial-gradient(
+      ellipse 55% 40% at 18% 45%,
+      rgba(150, 130, 90, 0.06) 0%,
+      transparent 70%
+    );
+  filter: blur(2px);
+}
+
+.phone-capsule--memory .phone-capsule__platform::before {
+  /* Faint horizontal light streaks — a polished-floor grazing highlight.
+     Three offset thin bands, blurred, so the eye reads "surface catching
+     distant light" without any hard edge. */
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 42%;
+  height: 40%;
+  pointer-events: none;
+  background:
+    linear-gradient(
+      180deg,
+      transparent 0%,
+      rgba(255, 226, 180, 0.14) 22%,
+      rgba(255, 216, 168, 0.08) 30%,
+      transparent 45%,
+      rgba(220, 200, 170, 0.06) 62%,
+      transparent 78%
+    );
+  filter: blur(1px);
+}
+
+.phone-capsule--memory .phone-capsule__platform::after {
+  /* One brighter horizontal streak — the "closest edge of the floor"
+     catching a highlight. Very narrow, dissolves at both sides. */
+  content: "";
+  position: absolute;
+  left: 8%;
+  right: 8%;
+  top: 44%;
+  height: 2px;
+  pointer-events: none;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(255, 230, 190, 0.34) 30%,
+    rgba(255, 234, 196, 0.42) 55%,
+    rgba(255, 226, 178, 0.24) 78%,
+    transparent 100%
+  );
+  filter: blur(1.5px);
 }
 
 .phone-capsule--music .phone-capsule__overlay {
@@ -1554,4 +1601,618 @@ body {
     width: 180vw;
     height: 620px;
   }
+}
+
+/* ============================================================
+   Beach Air — memory case file (Figma-mapped demo)
+   Cool light-lavender ground · typewriter typography · wireframe stage
+   ============================================================ */
+
+.beach-page {
+  min-height: 100vh;
+  padding: 0;
+  background:
+    radial-gradient(120% 70% at 50% 32%, #f0f1f4 0%, #e6e7eb 62%, #dcdde2 100%);
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  font-family: "SF Mono", "Iosevka", "JetBrains Mono", ui-monospace, Menlo,
+    Consolas, monospace;
+  color: #3b3e44;
+}
+
+.beach-frame {
+  width: min(420px, 92vw);
+  padding: 32px 30px 40px;
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+}
+
+/* ---------- Header tag ---------- */
+.beach-tag {
+  align-self: flex-start;
+  padding: 14px 24px 12px;
+  border-radius: 4px;
+  background: rgba(200, 202, 208, 0.55);
+  box-shadow:
+    inset 0 0 0 1px rgba(255, 255, 255, 0.6),
+    0 1px 0 rgba(0, 0, 0, 0.02);
+}
+
+.beach-tag span {
+  font-family: "Courier New", "Courier", ui-monospace, monospace;
+  font-weight: 700;
+  font-size: 28px;
+  letter-spacing: 0.14em;
+  color: #4a4d55;
+}
+
+/* ---------- Stage: capsule + wireframe floor + pins ---------- */
+.beach-stage {
+  position: relative;
+  height: 340px;
+  margin: 6px -6px 4px;
+}
+
+.beach-stage__box {
+  /* Rounded rectangle tilted into the floor plane. Subtle cool-grey fill
+     with a thin outline — echoes the capsule's footprint, matches the
+     Figma reference exactly. */
+  position: absolute;
+  left: 4%;
+  right: 4%;
+  top: 26%;
+  bottom: 4%;
+  z-index: 0;
+  pointer-events: none;
+  border: 1px solid rgba(120, 128, 140, 0.48);
+  border-radius: 48px;
+  background: rgba(200, 205, 214, 0.32);
+  transform: perspective(680px) rotateX(56deg);
+  transform-origin: center 65%;
+  box-shadow: 0 22px 34px -20px rgba(60, 70, 85, 0.12);
+}
+
+.beach-capsule {
+  position: absolute;
+  inset: 12% 4% 22% 4%;
+  z-index: 2;
+  /* No drop-shadow — the SVG crescent shadow below handles contact. */
+}
+
+.beach-capsule-shadow {
+  /* Curved crescent shadow that follows the capsule's base — sits between
+     the wireframe platform and the capsule so it reads as a real cast. */
+  position: absolute;
+  left: 6%;
+  right: 6%;
+  bottom: 12%;
+  height: 22%;
+  z-index: 1;
+  pointer-events: none;
+}
+
+.beach-stage__pin {
+  position: absolute;
+  z-index: 2;
+  display: grid;
+  place-items: center;
+  width: 18px;
+  height: 18px;
+  background: #ffffff;
+  color: #4a4d55;
+  font-family: "Courier New", monospace;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 1;
+  border-radius: 1px;
+  box-shadow:
+    0 0 0 1px rgba(120, 128, 140, 0.18),
+    0 2px 4px rgba(60, 70, 85, 0.10);
+  user-select: none;
+  pointer-events: none;
+}
+
+.beach-stage__pin--tl {
+  top: 30%;
+  left: 12%;
+}
+
+.beach-stage__pin--mid {
+  top: 46%;
+  left: 55%;
+}
+
+/* ---------- Scrubber ---------- */
+.beach-scrub {
+  position: relative;
+  height: 30px;
+  margin-top: 6px;
+}
+
+.beach-scrub__rule {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 50%;
+  height: 1px;
+  background: rgba(120, 128, 140, 0.32);
+  transform: translateY(-50%);
+}
+
+.beach-scrub__thumb {
+  position: absolute;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  /* Smaller, more subtle — matches the Figma proportions */
+  width: 24px;
+  height: 14px;
+  border-radius: 999px;
+  border: 1px solid rgba(96, 104, 116, 0.55);
+  background: transparent;
+  cursor: grab;
+  padding: 0;
+  transition: border-color 160ms ease, transform 120ms ease;
+}
+
+.beach-scrub__thumb:hover {
+  border-color: rgba(60, 68, 80, 0.85);
+}
+
+.beach-scrub__thumb:active { transform: translate(-50%, -50%) scale(0.96); }
+
+.beach-scrub__thumb:active { cursor: grabbing; }
+
+/* ---------- Meta row ---------- */
+.beach-meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: 12px;
+}
+
+.beach-meta__code {
+  font-family: "Courier New", "Courier", ui-monospace, monospace;
+  font-size: 13.5px;
+  font-weight: 400;
+  letter-spacing: 0.06em;
+  color: #43464c;
+}
+
+.beach-meta__tag {
+  padding: 6px 18px 5px;
+  border-radius: 3px;
+  border: 1px solid rgba(120, 128, 140, 0.5);
+  font-family: "Courier New", "Courier", ui-monospace, monospace;
+  font-size: 13px;
+  font-weight: 400;
+  letter-spacing: 0.04em;
+  color: #4a4d55;
+  background: transparent;
+}
+
+/* ---------- Dividers ---------- */
+.beach-divider {
+  height: 1px;
+  background: rgba(120, 128, 140, 0.22);
+  margin: 4px 0;
+}
+
+/* ---------- Body ---------- */
+.beach-body {
+  margin: 8px 0;
+  font-family: "Courier New", "Courier", ui-monospace, monospace;
+  font-size: 14px;
+  line-height: 1.9;
+  letter-spacing: 0.06em;
+  color: rgba(60, 65, 74, 0.8);
+  word-spacing: 0.1em;
+}
+
+/* ---------- Actions ---------- */
+.beach-actions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+  margin-top: 12px;
+}
+
+.beach-btn {
+  padding: 20px 0;
+  border: none;
+  border-radius: 4px;
+  background: rgba(180, 184, 192, 0.55);
+  color: #4a4d55;
+  font-family: "Courier New", "Courier", ui-monospace, monospace;
+  font-size: 17px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  cursor: pointer;
+  transition: background 160ms ease, transform 120ms ease;
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.5);
+}
+
+.beach-btn:hover {
+  background: rgba(200, 204, 212, 0.75);
+}
+
+.beach-btn:active {
+  transform: translateY(1px);
+}
+
+/* ============================================================
+   Museum — 3D scene (Phase 1)
+   Single Canvas · warm-cream ground · minimal case-file HUD
+   ============================================================ */
+.museum-page {
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  background: #eaeae4;
+}
+
+.museum-page canvas {
+  display: block;
+  width: 100% !important;
+  height: 100% !important;
+  cursor: grab;
+  /* Entrance choreography: subtle fade-in + rise as the scene settles */
+  animation: museum-canvas-in 900ms cubic-bezier(0.19, 1, 0.22, 1) both;
+}
+.museum-page canvas:active { cursor: grabbing; }
+
+@keyframes museum-canvas-in {
+  from { opacity: 0; transform: translateY(14px); }
+  to   { opacity: 1; transform: none; }
+}
+
+/* Stagger the HUD elements a beat behind the canvas */
+.museum-topbar,
+.museum-rail,
+.museum-sidebar {
+  animation: museum-hud-in 720ms cubic-bezier(0.19, 1, 0.22, 1) both;
+}
+.museum-topbar  { animation-delay: 260ms; }
+.museum-sidebar { animation-delay: 340ms; }
+.museum-rail    { animation-delay: 420ms; }
+
+@keyframes museum-hud-in {
+  from { opacity: 0; transform: translateY(-6px); }
+  to   { opacity: 1; transform: none; }
+}
+.museum-rail   { animation-name: museum-rail-in; }
+@keyframes museum-rail-in {
+  from { opacity: 0; transform: translateX(-50%) translateY(10px); }
+  to   { opacity: 1; transform: translateX(-50%) translateY(0); }
+}
+
+/* -- Vertical editorial masthead (far-left sidebar) ------------------ */
+.museum-sidebar {
+  position: absolute;
+  top: 50%;
+  left: 22px;
+  z-index: 5;
+  display: flex;
+  align-items: center;
+  gap: 22px;
+  writing-mode: vertical-rl;
+  transform: rotate(180deg) translateY(50%);
+  font-family: "Courier New", ui-monospace, Menlo, monospace;
+  font-size: 10px;
+  letter-spacing: 0.26em;
+  text-transform: uppercase;
+  color: rgba(20, 22, 26, 0.42);
+  pointer-events: none;
+}
+.museum-sidebar span::before {
+  content: "";
+  display: inline-block;
+  width: 22px;
+  height: 1px;
+  background: rgba(20, 22, 26, 0.28);
+  vertical-align: middle;
+  margin-right: 10px;
+  transform: translateY(-2px);
+}
+
+/* -- Direction A · Clean UI refactor --------------------------------- */
+
+/* -------- Top bar: identity (left) + counter (right) -------- */
+.museum-topbar {
+  position: absolute;
+  top: 26px;
+  left: 64px;
+  right: 32px;
+  z-index: 5;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  pointer-events: none;
+  color: rgba(20, 22, 26, 0.9);
+}
+
+.museum-topbar__left {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.museum-topbar__eye {
+  font-family: "Courier New", ui-monospace, Menlo, monospace;
+  font-size: 10.5px;
+  letter-spacing: 0;
+  color: #617475;
+  text-transform: uppercase;
+}
+
+.museum-topbar__title {
+  font-family: "Iowan Old Style", "Instrument Serif", Georgia, serif;
+  font-style: italic;
+  font-weight: 400;
+  font-size: 46px;
+  letter-spacing: 0;
+  line-height: 1;
+  color: rgba(20, 22, 26, 0.9);
+}
+
+.museum-topbar__right {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 3px;
+  font-family: "Courier New", ui-monospace, Menlo, monospace;
+  font-size: 10.5px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
+.museum-topbar__count {
+  font-family: "Iowan Old Style", Georgia, serif;
+  font-style: normal;
+  font-size: 20px;
+  letter-spacing: 0;
+  color: rgba(20, 22, 26, 0.88);
+  font-variant-numeric: tabular-nums;
+}
+.museum-topbar__count em {
+  font-style: normal;
+  color: rgba(20, 22, 26, 0.35);
+}
+
+.museum-topbar__lot {
+  color: rgba(20, 22, 26, 0.5);
+}
+
+/* -------- Detail card: floating panel, rounded, soft shadow -------- */
+.museum-card {
+  position: absolute;
+  top: 50%;
+  right: 40px;
+  transform: translate(24px, -50%);
+  z-index: 6;
+  width: min(360px, 34vw);
+  max-height: calc(100vh - 220px);
+  padding: 30px 30px 26px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  background: rgba(249, 252, 252, 0.78);
+  border: 1px solid rgba(255, 255, 255, 0.9);
+  border-radius: 8px;
+  box-shadow:
+    0 32px 60px -20px rgba(20, 22, 26, 0.16),
+    0 8px 20px -10px rgba(20, 22, 26, 0.08);
+  backdrop-filter: blur(24px) saturate(0.65);
+  color: rgba(20, 22, 26, 0.9);
+  opacity: 0;
+  pointer-events: none;
+  overflow-y: auto;
+  transition:
+    transform 420ms cubic-bezier(0.19, 1, 0.22, 1),
+    opacity 320ms ease;
+}
+.museum-card.is-open {
+  transform: translate(0, -50%);
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.museum-card__close {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  width: 30px;
+  height: 30px;
+  border: none;
+  border-radius: 999px;
+  background: transparent;
+  color: rgba(20, 22, 26, 0.55);
+  font-size: 20px;
+  line-height: 1;
+  cursor: pointer;
+  transition: background 160ms ease, color 160ms ease;
+  padding: 0;
+}
+.museum-card__close:hover {
+  background: rgba(20, 22, 26, 0.06);
+  color: rgba(20, 22, 26, 0.9);
+}
+
+.museum-card__eye {
+  font-family: "Courier New", ui-monospace, monospace;
+  font-size: 10.5px;
+  letter-spacing: 0.22em;
+  color: rgba(20, 22, 26, 0.55);
+  text-transform: uppercase;
+}
+
+.museum-card__title {
+  margin: 2px 0 4px;
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  line-height: 0.95;
+  font-family: "Iowan Old Style", "Instrument Serif", Georgia, serif;
+  font-weight: 400;
+  font-size: 40px;
+  letter-spacing: -0.015em;
+  color: rgba(20, 22, 26, 0.94);
+}
+.museum-card__title span:nth-child(2) {
+  font-style: italic;
+  color: rgba(20, 22, 26, 0.55);
+  font-size: 22px;
+  letter-spacing: -0.008em;
+  margin-top: 4px;
+}
+
+.museum-card__body {
+  margin: 6px 0 0;
+  font-family: -apple-system, "SF Pro Text", system-ui, sans-serif;
+  font-size: 14px;
+  line-height: 1.55;
+  color: rgba(20, 22, 26, 0.75);
+  max-width: 40ch;
+}
+
+/* Specification list — single column, dividers between rows */
+.museum-card__specs {
+  margin: 8px 0 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+.museum-card__specs > div {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: baseline;
+  padding: 10px 0;
+  border-top: 1px solid rgba(20, 22, 26, 0.08);
+  font-size: 13px;
+}
+.museum-card__specs > div:last-child {
+  border-bottom: 1px solid rgba(20, 22, 26, 0.08);
+}
+.museum-card__specs dt {
+  font-family: -apple-system, "SF Pro Text", system-ui, sans-serif;
+  color: rgba(20, 22, 26, 0.5);
+  font-weight: 400;
+}
+.museum-card__specs dd {
+  margin: 0;
+  font-family: "Courier New", ui-monospace, monospace;
+  font-size: 12px;
+  letter-spacing: 0.06em;
+  color: rgba(20, 22, 26, 0.9);
+  text-transform: uppercase;
+}
+
+/* -------- Bottom thumbnail rail -------- */
+.museum-rail {
+  position: absolute;
+  left: 50%;
+  bottom: 26px;
+  transform: translateX(-50%);
+  z-index: 5;
+  display: flex;
+  gap: 0;
+  padding: 10px;
+  background: rgba(249, 252, 252, 0.65);
+  border: 1px solid rgba(255, 255, 255, 0.95);
+  border-radius: 8px;
+  box-shadow:
+    0 18px 32px -14px rgba(20, 22, 26, 0.12),
+    0 4px 10px -6px rgba(20, 22, 26, 0.06);
+  backdrop-filter: blur(24px) saturate(0.65);
+}
+
+.museum-rail__chip {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 3px;
+  min-width: 108px;
+  padding: 10px 14px 9px;
+  background: transparent;
+  border: 1px solid transparent;
+  border-right-color: rgba(99, 122, 124, 0.16);
+  border-radius: 0;
+  cursor: pointer;
+  color: rgba(20, 22, 26, 0.88);
+  transition: background 180ms ease, border-color 180ms ease, transform 160ms ease;
+}
+.museum-rail__chip:hover {
+  background: rgba(20, 22, 26, 0.03);
+}
+.museum-rail__chip.is-active {
+  background: rgba(225, 238, 236, 0.65);
+  border-color: rgba(92, 125, 121, 0.25);
+  box-shadow: inset 0 -2px #799b96;
+}
+
+.museum-rail__chip:last-child { border-right-color: transparent; }
+.museum-rail__chip:focus-visible,
+.museum-card__close:focus-visible { outline: 2px solid #799b96; outline-offset: 2px; }
+
+.museum-rail__idx {
+  font-family: "Courier New", ui-monospace, monospace;
+  font-size: 10px;
+  letter-spacing: 0;
+  color: #617475;
+}
+.museum-rail__name {
+  font-family: "Iowan Old Style", Georgia, serif;
+  font-size: 15px;
+  letter-spacing: -0.005em;
+  color: rgba(20, 22, 26, 0.92);
+  line-height: 1;
+}
+.museum-rail__meta {
+  font-family: "Courier New", ui-monospace, monospace;
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  color: rgba(20, 22, 26, 0.5);
+  text-transform: uppercase;
+}
+
+@media (max-width: 900px) {
+  .museum-rail {
+    max-width: 92vw;
+    overflow-x: auto;
+  }
+  .museum-card {
+    right: 20px;
+    width: min(320px, 70vw);
+  }
+}
+
+@media (max-width: 600px) {
+  .museum-topbar { left: 24px; right: 24px; }
+  .museum-topbar__title { font-size: 26px; }
+  .museum-topbar__eye { font-size: 8px; letter-spacing: 0; }
+  .museum-sidebar { display: none; }
+  .museum-rail { overflow-x: auto; max-width: calc(100% - 32px); }
+  .museum-rail__chip { flex-shrink: 0; }
+}
+
+.museum-fallback {
+  display: grid;
+  place-items: center;
+  width: 100%;
+  height: 100%;
+  color: rgba(30, 26, 20, 0.7);
+  font-family: "Courier New", ui-monospace, monospace;
+  font-size: 13px;
+  text-align: center;
+}
+
+.museum-fallback a {
+  display: block;
+  margin-top: 12px;
+  color: rgba(30, 26, 20, 0.9);
+  text-decoration: underline;
 }

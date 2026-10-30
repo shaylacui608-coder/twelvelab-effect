@@ -5,8 +5,8 @@ import * as THREE from "three";
 import historyVert from "../shaders/history.vert.glsl";
 import historyFrag from "../shaders/history.frag.glsl";
 
-const STRIP_W = 512;
-const STRIP_H = 128;
+const DEFAULT_STRIP_W = 512;
+const DEFAULT_STRIP_H = 128;
 const MAX_HISTORY_DELTA = 1 / 30;
 
 type Options = {
@@ -15,6 +15,10 @@ type Options = {
   pillAspect: number;
   scrollSpeed: number;
   pasteWidth: number;
+  /** Ping-pong buffer size. Bump for large-screen presentations. */
+  stripSize?: [number, number];
+  /** If true, skip the per-frame history update (freeze the strip). */
+  paused?: boolean;
 };
 
 export function useHistoryStrip({
@@ -23,8 +27,11 @@ export function useHistoryStrip({
   pillAspect,
   scrollSpeed,
   pasteWidth,
+  stripSize,
+  paused = false,
 }: Options) {
   const { gl } = useThree();
+  const [STRIP_W, STRIP_H] = stripSize ?? [DEFAULT_STRIP_W, DEFAULT_STRIP_H];
 
   const rts = useMemo(() => {
     const opts = {
@@ -41,7 +48,8 @@ export function useHistoryStrip({
       a: new THREE.WebGLRenderTarget(STRIP_W, STRIP_H, opts),
       b: new THREE.WebGLRenderTarget(STRIP_W, STRIP_H, opts),
     };
-  }, []);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [STRIP_W, STRIP_H]);
 
   const pingPong = useRef({ read: rts.a, write: rts.b });
   const outputTexture = useRef<THREE.Texture>(rts.a.texture);
@@ -102,6 +110,7 @@ export function useHistoryStrip({
   }, [rts, material, quad]);
 
   useFrame((_, delta) => {
+    if (paused) return;
     if (!videoTexture) return;
     const video = videoTexture.image as HTMLVideoElement | undefined;
     if (
