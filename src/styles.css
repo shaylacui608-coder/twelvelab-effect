@@ -1923,9 +1923,9 @@ body {
 /* -------- Top bar: identity (left) + counter (right) -------- */
 .museum-topbar {
   position: absolute;
-  top: 26px;
-  left: 64px;
-  right: 32px;
+  top: 42px;
+  left: 48px;
+  right: 48px;
   z-index: 5;
   display: flex;
   justify-content: space-between;
@@ -1952,7 +1952,7 @@ body {
   font-family: "Iowan Old Style", "Instrument Serif", Georgia, serif;
   font-style: italic;
   font-weight: 400;
-  font-size: 46px;
+  font-size: 50px;
   letter-spacing: 0;
   line-height: 1;
   color: rgba(20, 22, 26, 0.9);
@@ -2114,13 +2114,14 @@ body {
 /* -------- Bottom thumbnail rail -------- */
 .museum-rail {
   position: absolute;
-  left: 50%;
-  bottom: 26px;
-  transform: translateX(-50%);
+  left: 4%;
+  right: 4%;
+  bottom: 38px;
+  overflow: hidden;
   z-index: 5;
   display: flex;
   gap: 0;
-  padding: 10px;
+  padding: 12px;
   background: rgba(249, 252, 252, 0.65);
   border: 1px solid rgba(255, 255, 255, 0.95);
   border-radius: 8px;
@@ -2135,8 +2136,8 @@ body {
   flex-direction: column;
   align-items: flex-start;
   gap: 3px;
-  min-width: 108px;
-  padding: 10px 14px 9px;
+  min-width: 216px;
+  padding: 18px 28px 16px;
   background: transparent;
   border: 1px solid transparent;
   border-right-color: rgba(99, 122, 124, 0.16);
@@ -2160,20 +2161,20 @@ body {
 
 .museum-rail__idx {
   font-family: "Courier New", ui-monospace, monospace;
-  font-size: 10px;
+  font-size: 14px;
   letter-spacing: 0;
   color: #617475;
 }
 .museum-rail__name {
   font-family: "Iowan Old Style", Georgia, serif;
-  font-size: 15px;
+  font-size: 24px;
   letter-spacing: -0.005em;
   color: rgba(20, 22, 26, 0.92);
   line-height: 1;
 }
 .museum-rail__meta {
   font-family: "Courier New", ui-monospace, monospace;
-  font-size: 10px;
+  font-size: 14px;
   letter-spacing: 0.14em;
   color: rgba(20, 22, 26, 0.5);
   text-transform: uppercase;
@@ -2191,7 +2192,7 @@ body {
 }
 
 @media (max-width: 600px) {
-  .museum-topbar { left: 24px; right: 24px; }
+  .museum-topbar { left: 32px; right: 32px; top: 48px; }
   .museum-topbar__title { font-size: 26px; }
   .museum-topbar__eye { font-size: 8px; letter-spacing: 0; }
   .museum-sidebar { display: none; }

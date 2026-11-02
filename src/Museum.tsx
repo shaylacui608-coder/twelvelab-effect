@@ -217,7 +217,7 @@ const POSITIONS: Array<[number, number, number]> = [
 /* Camera pulled well back so both shelves and all six capsules sit
    comfortably inside the frame with white space around them, like
    the NYT reference. Telephoto FOV keeps perspective flat. */
-const HOME_EYE: [number, number, number] = [1.2, 8.6, 30.8];
+const HOME_EYE: [number, number, number] = [1.2, 10.8, 39];
 const HOME_TARGET: [number, number, number] = [0, 2, 0];
 
 // Detail view: shift camera target right so the capsule sits left
@@ -352,7 +352,7 @@ function Scene({
 }) {
   const controls = useRef<CameraControls>(null!);
   const aspect = useThree((state) => state.size.width / state.size.height);
-  const homeDistance = Math.max(30.8, 46 / aspect);
+  const homeDistance = Math.max(39, 46 / aspect);
   const [hoveredIdx, setHoveredIdx] = useState<number | null>(null);
 
   const applyView = (idx: number | null) => {
